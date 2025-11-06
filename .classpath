@@ -8,5 +8,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="libs/gson-2.10.1.jar"/>
 	<classpathentry kind="lib" path="libs/mysql-connector-j-9.3.0.jar"/>
+	<classpathentry kind="lib" path="libs/jaxb-core-3.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/jaxb-impl-3.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/jakarta.xml.bind-api-3.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/jakarta.activation-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

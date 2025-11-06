@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+
+  <xs:element name="inventario">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="categorias" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="categoria" type="categoriaType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="productos" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="producto" type="productoType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="movimientos" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="movimiento" type="movimientoType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="categoriaType">
+    <xs:sequence>
+      <xs:element name="nombre" type="xs:string"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:int" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="productoType">
+    <xs:sequence>
+      <xs:element name="nombre" type="xs:string"/>
+      <xs:element name="categoria_id" type="xs:int"/>
+      <xs:element name="stock" type="xs:int"/>
+      <xs:element name="precio" type="xs:double"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:int" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="movimientoType">
+    <xs:sequence>
+      <xs:element name="producto_id" type="xs:int"/>
+      <xs:element name="tipo" type="xs:string"/>
+      <xs:element name="cantidad" type="xs:int"/>
+      <xs:element name="fecha" type="xs:dateTime"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:int" use="required"/>
+  </xs:complexType>
+
+</xs:schema>

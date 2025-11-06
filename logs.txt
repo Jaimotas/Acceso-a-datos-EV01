@@ -1,0 +1,25 @@
+[2025-11-06T16:38:22.301101] [INFO] Archivo creado: logs.txt
+[2025-11-06T16:38:22.310099200] [INFO] Archivo creado: errorlog.txt
+[2025-11-06T16:38:22.312107200] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T16:38:28.800440] [INFO] Aplicación cerrada correctamente.
+[2025-11-06T16:45:24.455214700] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T16:45:24.460219900] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T16:45:24.464220600] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T16:45:50.485862700] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T16:45:50.490862300] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T16:45:50.495861800] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T16:57:13.496409800] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T16:57:13.502950900] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T16:57:13.505950500] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T16:57:16.000877400] [INFO] Listado de categorias cargado
+[2025-11-06T16:57:16.019385300] [INFO] Lista de productos cargada correctamente
+[2025-11-06T16:59:11.997114500] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T16:59:12.011118400] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T16:59:12.014119600] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T17:01:34.141933300] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T17:01:34.148934500] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T17:01:34.153935800] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T17:01:35.821667100] [INFO] Listado de categorias cargado
+[2025-11-06T17:01:35.840667100] [INFO] Lista de productos cargada correctamente
+[2025-11-06T17:01:35.959661600] [INFO] Inventario exportado correctamente a src/resources/inventario.xml
+[2025-11-06T17:01:35.962657100] [INFO] Inventario exportado a XML correctamente.

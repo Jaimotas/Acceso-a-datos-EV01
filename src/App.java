@@ -1,14 +1,13 @@
-
-
-
 import java.util.List;
 import java.util.Scanner;
+
 import CRUD.Categoria;
 import CRUD.CategoriaCRUD;
 import CRUD.Producto;
 import CRUD.ProductoCRUD;
 import Logs.FileLogger;
 import SQL.CargaCSVs;
+import XML.XMLManager;
 
 public class App {
     private static Scanner sc = new Scanner(System.in);
@@ -24,9 +23,11 @@ public class App {
             mostrarMenu();
             opcion = leerEntero("Elige una opción: ");
             switch (opcion) {
-            	case 1 -> CargaCSVs.cargarCSVEnBD("src/resources/inventario.csv");
+                case 1 -> CargaCSVs.cargarCSVEnBD("src/resources/inventario.csv");
                 case 2 -> gestionarCategorias();
                 case 3 -> gestionarProductos();
+                case 4 -> exportarA_XML();
+                case 5 -> importarDesde_XML();
                 case 0 -> {
                     System.out.println("Saliendo de la aplicación...");
                     logs.info("Aplicación cerrada correctamente.");
@@ -35,19 +36,18 @@ public class App {
             }
         } while (opcion != 0);
     }
-    
+
     private static void mostrarMenu() {
         System.out.println("\n===== MENÚ PRINCIPAL =====");
         System.out.println("1. Cargar CSV en base de datos");
         System.out.println("2. Gestionar categorías");
         System.out.println("3. Gestionar productos");
+        System.out.println("4. Exportar inventario a XML");
+        System.out.println("5. Importar inventario desde XML");
         System.out.println("0. Salir");
     }
 
     // ================== CATEGORÍAS ==================
-    /**
-     * Muestra el menu con las opciones y gestiona las categorias
-     */
     private static void gestionarCategorias() {
         int opcion;
         do {
@@ -71,9 +71,6 @@ public class App {
     }
 
     // ================== PRODUCTOS ==================
-    /**
-     * Muestra el menu con las opciones y gestiona los productos 
-     */
     private static void gestionarProductos() {
         int opcion;
         do {
@@ -101,9 +98,8 @@ public class App {
     }
 
     // ================== FUNCIONES DE CATEGORÍAS ==================
- 
     private static void listarCategorias() {
-    	List<Categoria> categorias = categoriaCRUD.listarCategorias();
+        List<Categoria> categorias = categoriaCRUD.listarCategorias();
         System.out.println("\nListado de Categorías:");
         for (Categoria c : categorias) {
             System.out.println(c.getId() + " - " + c.getNombre());
@@ -172,11 +168,7 @@ public class App {
         productoCRUD.borrarProducto(id);
         System.out.println("Producto eliminado.");
     }
-
-    // ================== NUEVAS FUNCIONES ==================
-    /**
-     * Pide al usuario los datos del producto a cambiar el stock
-     */
+    
     private static void gestionarMovimientoStock() {
         int id = leerEntero("ID del producto: ");
         int cantidad = leerEntero("Cantidad: ");
@@ -187,13 +179,34 @@ public class App {
         productoCRUD.moverStock(id, cantidad, entrada);
         System.out.println("Movimiento de stock realizado.");
     }
-    /**
-     * Pide al usuario el limite de stock para exportarlo al json
-     */
+
     private static void exportarStockBajo() {
         int limite = leerEntero("Introduce el límite de stock: ");
         productoCRUD.exportarProductosStockBajo(limite);
         System.out.println("Exportación completada. Revisa el archivo JSON.");
+    }
+
+    // ================== EXPORTAR / IMPORTAR XML ==================
+    private static void exportarA_XML() {
+        try {
+            XMLManager.exportarInventario();
+            System.out.println("Inventario exportado correctamente a XML.");
+            logs.info("Inventario exportado a XML correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al exportar inventario a XML.");
+            logs.error("Error al exportar inventario a XML: " + e.getMessage());
+        }
+    }
+
+    private static void importarDesde_XML() {
+        try {
+            XMLManager.importarInventario();
+            System.out.println("Inventario restaurado correctamente desde XML.");
+            logs.info("Inventario importado desde XML correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al importar inventario desde XML.");
+            logs.error("Error al importar inventario desde XML: " + e.getMessage());
+        }
     }
 
     // ================== UTILIDADES ==================
