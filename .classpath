@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/jaime/OneDrive - EDU.CEPIF PROFESSIONAL TRAINNING S.L/Eclipse/workspace-spring-tools-for-eclipse-4.32.0.RELEASE/Acceso a datos en ficheros – Fase I/libs/gson-2.10.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jaime/OneDrive - EDU.CEPIF PROFESSIONAL TRAINNING S.L/Eclipse/workspace-spring-tools-for-eclipse-4.32.0.RELEASE/Acceso a datos en ficheros – Fase I/libs/mysql-connector-j-9.3.0.jar"/>
+	<classpathentry kind="lib" path="libs/gson-2.10.1.jar"/>
+	<classpathentry kind="lib" path="libs/mysql-connector-j-9.3.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
