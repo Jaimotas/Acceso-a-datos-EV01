@@ -22,7 +22,7 @@ public class XMLManager {
      */
     public static void exportarInventario() {
         try {
-            CategoriaCRUD categoriaCRUD = new CategoriaCRUD();
+             CategoriaCRUD categoriaCRUD = new CategoriaCRUD();
             ProductoCRUD productoCRUD = new ProductoCRUD();
 
             List<Categoria> categorias = categoriaCRUD.listarCategorias();

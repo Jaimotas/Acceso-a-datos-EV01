@@ -23,3 +23,36 @@
 [2025-11-06T17:01:35.840667100] [INFO] Lista de productos cargada correctamente
 [2025-11-06T17:01:35.959661600] [INFO] Inventario exportado correctamente a src/resources/inventario.xml
 [2025-11-06T17:01:35.962657100] [INFO] Inventario exportado a XML correctamente.
+[2025-11-06T17:59:30.014230200] [INFO] Consulta de valor total de stock por categoría ejecutada correctamente.
+[2025-11-06T18:21:19.958638600] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T18:21:19.962640900] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T18:21:19.965644900] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T18:21:25.861891700] [INFO] Listado de categorias cargado
+[2025-11-06T18:21:25.880892] [INFO] Lista de productos cargada correctamente
+[2025-11-06T18:21:26.037073300] [INFO] Inventario exportado correctamente a src/resources/inventario.xml
+[2025-11-06T18:21:26.040072300] [INFO] Inventario exportado a XML correctamente.
+[2025-11-06T18:21:54.920262400] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T18:21:54.924262] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T18:21:54.928261600] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T18:22:08.508245] [INFO] Consulta Top 123 productos más vendidos ejecutada correctamente.
+[2025-11-06T18:22:36.411734700] [INFO] Consulta de valor total de stock por categoría ejecutada correctamente.
+[2025-11-06T18:23:10.370841400] [INFO] Histórico de movimientos ejecutado correctamente.
+[2025-11-06T18:23:14.372103600] [WARNING] Entrada inválida, se esperaba un número.
+[2025-11-06T18:23:15.876068900] [INFO] Aplicación cerrada correctamente.
+[2025-11-06T18:24:35.299791200] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T18:24:35.305806600] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T18:24:35.308806500] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T18:24:37.731359900] [INFO] Aplicación cerrada correctamente.
+[2025-11-06T18:24:39.904848500] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T18:24:39.909854300] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T18:24:39.911853600] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T18:24:44.913949100] [INFO] Consulta Top 2 productos más vendidos ejecutada correctamente.
+[2025-11-06T18:29:40.744486700] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T18:29:40.748796500] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T18:29:40.750792600] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T18:29:42.805096700] [INFO] Aplicación cerrada correctamente.
+[2025-11-06T18:29:44.787460200] [WARNING] El archivo logs.txt ya existe.
+[2025-11-06T18:29:44.793458300] [WARNING] El archivo errorlog.txt ya existe.
+[2025-11-06T18:29:44.797458300] [INFO] Aplicación iniciada correctamente.
+[2025-11-06T18:29:52.902115200] [INFO] Consulta Top 12 productos más vendidos ejecutada correctamente.
+[2025-11-06T18:29:52.911113500] [INFO] Consulta Top N productos más vendidos ejecutada correctamente.

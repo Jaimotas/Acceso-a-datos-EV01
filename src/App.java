@@ -1,6 +1,5 @@
 import java.util.List;
 import java.util.Scanner;
-
 import CRUD.Categoria;
 import CRUD.CategoriaCRUD;
 import CRUD.Producto;
@@ -28,6 +27,7 @@ public class App {
                 case 3 -> gestionarProductos();
                 case 4 -> exportarA_XML();
                 case 5 -> importarDesde_XML();
+                case 6 -> consultasAvanzadas();
                 case 0 -> {
                     System.out.println("Saliendo de la aplicación...");
                     logs.info("Aplicación cerrada correctamente.");
@@ -44,6 +44,7 @@ public class App {
         System.out.println("3. Gestionar productos");
         System.out.println("4. Exportar inventario a XML");
         System.out.println("5. Importar inventario desde XML");
+        System.out.println("6. Consultas avanzadas SQL");
         System.out.println("0. Salir");
     }
 
@@ -168,7 +169,7 @@ public class App {
         productoCRUD.borrarProducto(id);
         System.out.println("Producto eliminado.");
     }
-    
+
     private static void gestionarMovimientoStock() {
         int id = leerEntero("ID del producto: ");
         int cantidad = leerEntero("Cantidad: ");
@@ -208,6 +209,69 @@ public class App {
             logs.error("Error al importar inventario desde XML: " + e.getMessage());
         }
     }
+
+ // ================== CONSULTAS AVANZADAS ==================
+    private static void consultasAvanzadas() {
+        int opcion;
+        do {
+            System.out.println("\n--- Consultas Avanzadas SQL ---");
+            System.out.println("1. Top N productos más vendidos");
+            System.out.println("2. Valor total de stock por categoría");
+            System.out.println("3. Histórico de movimientos por rango de fechas");
+            System.out.println("0. Volver");
+            opcion = leerEntero("Elige una opción: ");
+
+            switch (opcion) {
+                case 1 -> {
+                    int n = leerEntero("Introduce N: ");
+                    System.out.println("\n Top " + n + " productos más vendidos:");
+                    List<String> topProductos = productoCRUD.topNProductosMasVendidos(n);
+                    if (topProductos.isEmpty()) {
+                        System.out.println("No hay datos disponibles.");
+                    } else {
+                        for (String producto : topProductos) {
+                            System.out.println(producto);
+                        }
+                    }
+                    logs.info("Consulta Top N productos más vendidos ejecutada correctamente.");
+                }
+
+                case 2 -> {
+                    System.out.println("\n Valor total del stock por categoría:");
+                    List<String> valores = categoriaCRUD.valorTotalStockPorCategoria();
+                    if (valores.isEmpty()) {
+                        System.out.println("No hay categorías o productos registrados.");
+                    } else {
+                        for (String linea : valores) {
+                            System.out.println(linea);
+                        }
+                    }
+                    logs.info("Consulta valor total de stock por categoría ejecutada correctamente.");
+                }
+
+                case 3 -> {
+                    System.out.print("Fecha inicio (YYYY-MM-DD): ");
+                    String inicio = sc.nextLine();
+                    System.out.print("Fecha fin (YYYY-MM-DD): ");
+                    String fin = sc.nextLine();
+                    System.out.println("\n Histórico de movimientos entre " + inicio + " y " + fin + ":");
+                    List<String> movimientos = productoCRUD.historicoMovimientosPorFechas(inicio, fin);
+                    if (movimientos.isEmpty()) {
+                        System.out.println("No se encontraron movimientos en ese rango de fechas.");
+                    } else {
+                        for (String mov : movimientos) {
+                            System.out.println(mov);
+                        }
+                    }
+                    logs.info("Consulta de histórico de movimientos ejecutada correctamente.");
+                }
+
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> System.out.println("Opción no válida");
+            }
+        } while (opcion != 0);
+    }
+
 
     // ================== UTILIDADES ==================
     private static int leerEntero(String msg) {

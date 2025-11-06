@@ -1,4 +1,4 @@
-	package CRUD;
+package CRUD;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,10 +11,8 @@ import SQL.DBconexion;
 
 public class ProductoCRUD {
     private FileLogger logs = new FileLogger();
-	/**
-	 * Lista los productos que recoge desde la base de datos
-	 * @return lista con todas los productos 
-	 */
+
+    // ================== CRUD BÁSICO ==================
     public List<Producto> listarProductos() {
         List<Producto> lista = new ArrayList<>();
         String sql = "SELECT * FROM productos ORDER BY id ASC";
@@ -36,10 +34,7 @@ public class ProductoCRUD {
         logs.info("Lista de productos cargada correctamente");
         return lista;
     }
-    /**
-	 * Inserta el producto nueva en la base de datos
-	 * @param catg datos de el producto a insertar
-	 */
+
     public void agregarProducto(Producto prod) {
         String sql = "INSERT INTO productos(nombre, categoria_id, stock, precio) VALUES(?,?,?,?)";
         try (Connection conn = DBconexion.getConnection();
@@ -54,11 +49,7 @@ public class ProductoCRUD {
             logs.error("Error al agregar producto: " + e.getMessage());
         }
     }
-    /**
-     * Edita el producto en base al id
-     * @param id
-     * @param nuevoNombre
-     */
+
     public void editarProducto(int id, String nuevoNombre, int nuevaCategoriaId, int nuevoStock, double nuevoPrecio) {
         String sql = "UPDATE productos SET nombre = ?, categoria_id = ?, stock = ?, precio = ? WHERE id = ?";
         try (Connection conn = DBconexion.getConnection();
@@ -74,10 +65,7 @@ public class ProductoCRUD {
             logs.error("Error al editar producto con id= " + id + ": " + e.getMessage());
         }
     }
-    /**
-     * Borra el producto de un id seleccionado
-     * @param id
-     */
+
     public void borrarProducto(int id) {
         String sql = "DELETE FROM productos WHERE id = ?";
         try (Connection conn = DBconexion.getConnection();
@@ -89,16 +77,14 @@ public class ProductoCRUD {
             logs.error("Error al borrar producto con id= " + id + ": " + e.getMessage());
         }
     }
-    /**
-     * 
-     * @param id
-     */
+
+    // ================== STOCK Y MOVIMIENTOS ==================
     public void moverStock(int id_Producto, int cantidad, boolean entrada) {
         String sqlActualizar = "UPDATE productos SET stock = stock + ? WHERE id = ?";
         String sqlInsertarMovimiento = "INSERT INTO movimientos (id_producto, tipo, cantidad, fecha) VALUES (?, ?, ?, NOW())";
 
         try (Connection conn = DBconexion.getConnection()) {
-            conn.setAutoCommit(false); // Inicia la transacción
+            conn.setAutoCommit(false);
 
             try (PreparedStatement psUpdate = conn.prepareStatement(sqlActualizar);
                  PreparedStatement psInsert = conn.prepareStatement(sqlInsertarMovimiento)) {
@@ -116,7 +102,8 @@ public class ProductoCRUD {
                 psInsert.executeUpdate();
 
                 conn.commit();
-                logs.info("Movimiento de stock registrado correctamente: " + tipo + " de " + cantidad+ " producto/s para producto de id= "+ id_Producto);
+                logs.info("Movimiento de stock registrado correctamente: " + tipo + " de " + cantidad +
+                          " producto/s para producto de id= " + id_Producto);
 
             } catch (SQLException e) {
                 conn.rollback();
@@ -129,6 +116,8 @@ public class ProductoCRUD {
             logs.error("Error de conexión al mover stock: " + e.getMessage());
         }
     }
+
+    // ================== EXPORTAR A JSON ==================
     public void exportarProductosStockBajo(int limiteStock) {
         String sql = "SELECT * FROM productos WHERE stock < ?";
         List<Producto> productosBajos = new ArrayList<>();
@@ -159,5 +148,62 @@ public class ProductoCRUD {
         } catch (Exception e) {
             logs.error("Error al exportar productos con stock bajo: " + e.getMessage());
         }
+    }
+
+    // ================== CONSULTAS AVANZADAS ==================
+
+    /** 🔹 Top N productos más vendidos */
+    public List<String> topNProductosMasVendidos(int n) {
+        List<String> resultado = new ArrayList<>();
+        String sql = """
+            SELECT p.nombre, SUM(m.cantidad) AS total_vendido
+            FROM productos p
+            JOIN movimientos m ON p.id = m.id_producto
+            WHERE m.tipo = 'SALIDA'
+            GROUP BY p.nombre
+            ORDER BY total_vendido DESC
+            LIMIT ?;
+        """;
+
+        try (Connection conn = DBconexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, n);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                resultado.add(rs.getString("nombre") + " - Total vendido: " + rs.getInt("total_vendido"));
+            }
+            logs.info("Consulta Top " + n + " productos más vendidos ejecutada correctamente.");
+        } catch (SQLException e) {
+            logs.error("Error al obtener Top N productos: " + e.getMessage());
+        }
+        return resultado;
+    }
+
+    /** 🔹 Histórico de movimientos entre fechas */
+    public List<String> historicoMovimientosPorFechas(String fechaInicio, String fechaFin) {
+        List<String> resultado = new ArrayList<>();
+        String sql = """
+            SELECT m.id, p.nombre AS producto, m.tipo, m.cantidad, m.fecha
+            FROM movimientos m
+            JOIN productos p ON m.id_producto = p.id
+            WHERE m.fecha BETWEEN ? AND ?
+            ORDER BY m.fecha ASC;
+        """;
+
+        try (Connection conn = DBconexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, fechaInicio);
+            ps.setString(2, fechaFin);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                resultado.add("[" + rs.getString("fecha") + "] " +
+                              rs.getString("producto") + " - " + rs.getString("tipo") +
+                              " (" + rs.getInt("cantidad") + ")");
+            }
+            logs.info("Histórico de movimientos ejecutado correctamente.");
+        } catch (SQLException e) {
+            logs.error("Error al obtener histórico de movimientos: " + e.getMessage());
+        }
+        return resultado;
     }
 }
