@@ -90,9 +90,14 @@ public class CategoriaCRUD {
         try (Connection conn = DBconexion.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
-                resultado.add(rs.getString("categoria") + " - Valor total: " + rs.getDouble("valor_total") + " €");
+                String categoria = rs.getString("categoria");
+                double valorTotal = rs.getDouble("valor_total");
+                String valorFormateado = String.format("%.2f", valorTotal);
+                resultado.add(categoria + " - Valor total: " + valorFormateado + " €");
             }
+
             logs.info("Consulta de valor total de stock por categoría ejecutada correctamente.");
         } catch (SQLException e) {
             logs.error("Error al calcular el valor total de stock por categoría: " + e.getMessage());
@@ -100,4 +105,5 @@ public class CategoriaCRUD {
 
         return resultado;
     }
+
 }

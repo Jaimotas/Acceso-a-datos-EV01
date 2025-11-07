@@ -1,6 +1,9 @@
 package XML;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.util.List;
 
 import CRUD.Categoria;
@@ -8,6 +11,7 @@ import CRUD.CategoriaCRUD;
 import CRUD.Producto;
 import CRUD.ProductoCRUD;
 import Logs.FileLogger;
+import SQL.DBconexion;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
@@ -53,37 +57,54 @@ public class XMLManager {
         try {
             JAXBContext context = JAXBContext.newInstance(InventoryWrapper.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-
-            File file = new File(XML_PATH);
-            if (!file.exists()) {
-                logs.warning("No se encontró el archivo XML en " + XML_PATH);
-                System.err.println("Archivo XML no encontrado.");
-                return;
-            }
-
-            InventoryWrapper wrapper = (InventoryWrapper) unmarshaller.unmarshal(file);
+            InventoryWrapper wrapper = (InventoryWrapper) unmarshaller.unmarshal(new File(XML_PATH));
 
             CategoriaCRUD categoriaCRUD = new CategoriaCRUD();
             ProductoCRUD productoCRUD = new ProductoCRUD();
+            FileLogger logs = new FileLogger();
 
-            if (wrapper.getCategorias() != null) {
-                for (Categoria c : wrapper.getCategorias()) {
+            // 1️⃣ Importar categorías primero
+            List<Categoria> categorias = wrapper.getCategorias();
+            for (Categoria c : categorias) {
+                try {
                     categoriaCRUD.agregarCategoria(c);
+                } catch (Exception e) {
+                    logs.warning("No se pudo agregar categoría: " + c.getNombre() + " -> " + e.getMessage());
                 }
             }
 
-            if (wrapper.getProductos() != null) {
-                for (Producto p : wrapper.getProductos()) {
+            // 2️⃣ Luego los productos
+            List<Producto> productos = wrapper.getProductos();
+            for (Producto p : productos) {
+                try {
                     productoCRUD.agregarProducto(p);
+                } catch (Exception e) {
+                    logs.warning("No se pudo agregar producto: " + p.getNombre() + " -> " + e.getMessage());
                 }
             }
 
-            logs.info("Inventario importado correctamente desde " + XML_PATH);
-            System.out.println("Inventario importado correctamente desde " + XML_PATH);
+            // 3️⃣ (Opcional) Si hay movimientos
+            if (wrapper.getMovimientos() != null) {
+                try (Connection conn = DBconexion.getConnection()) {
+                    String sql = "INSERT INTO movimientos (id_producto, tipo, cantidad, fecha) VALUES (?, ?, ?, ?)";
+                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                        for (MovimientoXml m : wrapper.getMovimientos()) {
+                            ps.setInt(1, m.getIdProducto());
+                            ps.setString(2, m.getTipo());
+                            ps.setInt(3, m.getCantidad());
+                            ps.setTimestamp(4, Timestamp.valueOf(m.getFecha().replace("T", " ").substring(0, 19)));
+                            ps.executeUpdate();
+                        }
+                    }
+                }
+            }
+
+            logs.info("Inventario importado correctamente desde XML.");
 
         } catch (Exception e) {
-            logs.error("Error al importar inventario desde XML: " + e.getMessage());
-            System.err.println("Error al importar inventario: " + e.getMessage());
+            e.printStackTrace();
+            System.out.println("❌ Error al importar inventario desde XML: " + e.getMessage());
         }
     }
+
 }

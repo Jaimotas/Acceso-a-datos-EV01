@@ -52,22 +52,31 @@ public class XmlService {
             wrapper.setProductos(prods);
 
             // ===== MOVIMIENTOS =====
-            /*List<MovimientoXml> movs = new ArrayList<>();
+            List<MovimientoXml> movs = new ArrayList<>();
+
+            String sql = "SELECT id, id_producto, tipo, cantidad, fecha FROM movimientos ORDER BY fecha DESC";
+
             try (Connection conn = DBconexion.getConnection();
-                 Statement st = conn.createStatement();
-                 ResultSet rs = st.executeQuery("SELECT id, id_producto, tipo, cantidad, fecha FROM movimientos")) {
+                 PreparedStatement ps = conn.prepareStatement(sql);
+                 ResultSet rs = ps.executeQuery()) {
 
                 while (rs.next()) {
-                    movs.add(new MovimientoXml(
-                            rs.getInt("id"),
-                            rs.getInt("id_producto"),
-                            rs.getString("tipo"),
-                            rs.getInt("cantidad"),
-                            rs.getTimestamp("fecha").toInstant().toString()
-                    ));
+                    MovimientoXml movimiento = new MovimientoXml();
+                    movimiento.setId(rs.getInt("id"));
+                    movimiento.setIdProducto(rs.getInt("id_producto"));
+                    movimiento.setTipo(rs.getString("tipo"));
+                    movimiento.setCantidad(rs.getInt("cantidad"));
+                    movimiento.setFecha(rs.getTimestamp("fecha").toInstant().toString());
+                    movs.add(movimiento);
                 }
+
+                wrapper.setMovimientos(movs);
+                logs.info("Movimientos exportados correctamente a XML. Total: " + movs.size());
+
+            } catch (SQLException e) {
+                logs.error("Error al obtener movimientos desde la base de datos: " + e.getMessage());
             }
-            wrapper.setMovimientos(movs);*/
+
 
             // ===== MARSHALLING (Exportar a XML) =====
             JAXBContext ctx = JAXBContext.newInstance(

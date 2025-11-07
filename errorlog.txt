@@ -1,0 +1,11 @@
+
+[2025-11-07T13:21:27.120992300] [ERROR] Error al cargar categoria 
+[2025-11-07T13:21:27.125978500] [ERROR] Error al cargar categoria 
+[2025-11-07T13:21:27.132960100] [ERROR] Error al cargar categoria 
+[2025-11-07T13:21:27.137947100] [ERROR] Error al cargar categoria 
+[2025-11-07T13:21:27.141936300] [ERROR] Error al cargar categoria 
+[2025-11-07T13:21:27.147919100] [ERROR] Error al cargar categoria 
+[2025-11-07T13:21:27.152906] [ERROR] Error al cargar categoria 
+[2025-11-07T13:21:27.158890700] [ERROR] Error al cargar categoria 
+[2025-11-07T13:21:27.164875100] [ERROR] Error al cargar categoria 
+[2025-11-07T13:21:27.169860800] [ERROR] Error al cargar categoria 
