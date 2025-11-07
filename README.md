@@ -70,23 +70,24 @@ Para cargar la base de datos se encuentra dentro de la carpeta **/resources**, e
 
 ## Ejemplo de uso
 
-### 1- Carga desde CSV
+### 1- Configuración inicial
 
-El archivo CSV se encuentra en `/resources/inventario.csv` y contiene los datos iniciales del inventario.  
+- Configura la base de datos con `ad.sql`.
+- Ajusta las credenciales de conexión en la clase `ConexionBD`.
+- Ejecuta la clase principal `APP` para abrir el menú del programa.
 
-### 2- Exportar e importar inventario
+### 2- Operaciones disponibles desde el menú
+- Cargar CSV en base de datos
+- Gestionar categorías
+- Gestionar productos
+- Gestionar Movimientos de Stock
+- Exportar inventario a XML
+- Importar inventario desde XML
+- Consultas avanzadas SQL
 
-- **Exportar**: genera un archivo `inventario.xml` con todos los datos del sistema.  
-- **Importar**: lee el XML y actualiza la base de datos.  
-  En caso de conflicto (por ejemplo, claves foráneas inexistentes), se registran los errores en el log.
+---
 
-### 3- Consultas avanzadas
-
-- **Top N productos más vendidos**  
-- **Valor total de stock por categoría (con dos decimales)**  
-- **Histórico de movimientos entre dos fechas**
-
-### 4- Optimizacion con `EXPLAIN`
+## Optimizacion con `EXPLAIN`
 
   La siguiente optimización se realizó sobre la consulta de productos con más ventas (movimientos tipo **SALIDA**).  
   Esta operación implica **JOIN**, **WHERE**, **GROUP BY** y **ORDER BY**, lo que la hace ideal para analizar con `EXPLAIN` e índices compuestos.
