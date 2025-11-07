@@ -50,6 +50,7 @@ public class MovimientoCRUD {
         } catch (Exception e) {
             logs.fatal("Error general durante la importación: " + e.getMessage());
         }
+       System.out.println("Carga de CSV completa");
     }
     public void moverStock(int id_Producto, int cantidad, boolean entrada) {
         String sqlActualizar = "UPDATE productos SET stock = stock + ? WHERE id = ?";
