@@ -4,6 +4,7 @@ import CRUD.Categoria;
 import CRUD.CategoriaCRUD;
 import CRUD.Producto;
 import CRUD.ProductoCRUD;
+import CRUD.MovimientoCRUD;
 import Logs.FileLogger;
 import SQL.CargaCSVs;
 import XML.XMLManager;
@@ -12,6 +13,7 @@ public class App {
     private static Scanner sc = new Scanner(System.in);
     private static CategoriaCRUD categoriaCRUD = new CategoriaCRUD();
     private static ProductoCRUD productoCRUD = new ProductoCRUD();
+    private static MovimientoCRUD movimientoCRUD = new MovimientoCRUD();
     private static FileLogger logs = new FileLogger();
 
     public static void main(String[] args) {
@@ -25,9 +27,10 @@ public class App {
                 case 1 -> CargaCSVs.cargarCSVEnBD("src/resources/inventario.csv");
                 case 2 -> gestionarCategorias();
                 case 3 -> gestionarProductos();
-                case 4 -> exportarA_XML();
-                case 5 -> importarDesde_XML();
-                case 6 -> consultasAvanzadas();
+                case 4 -> gestionarMovimientos();
+                case 5 -> exportarA_XML();
+                case 6 -> importarDesde_XML();
+                case 7 -> consultasAvanzadas();
                 case 0 -> {
                     System.out.println("Saliendo de la aplicación...");
                     logs.info("Aplicación cerrada correctamente.");
@@ -42,9 +45,10 @@ public class App {
         System.out.println("1. Cargar CSV en base de datos");
         System.out.println("2. Gestionar categorías");
         System.out.println("3. Gestionar productos");
-        System.out.println("4. Exportar inventario a XML");
-        System.out.println("5. Importar inventario desde XML");
-        System.out.println("6. Consultas avanzadas SQL");
+        System.out.println("4. Gestionar Movimientos de Stock");
+        System.out.println("5. Exportar inventario a XML");
+        System.out.println("6. Importar inventario desde XML");
+        System.out.println("7. Consultas avanzadas SQL");
         System.out.println("0. Salir");
     }
 
@@ -97,7 +101,24 @@ public class App {
             }
         } while (opcion != 0);
     }
+    // ================== MOVIMIENTOS ==================
+    private static void gestionarMovimientos() {
+        int opcion;
+        do {
+            System.out.println("\n--- Gestión de Movimientos ---");
+            System.out.println("1. Movimiento de stock (entrada/salida)");
+            System.out.println("2. Carga de Movimientos mediante CSV");
+            System.out.println("0. Volver");
+            opcion = leerEntero("Elige una opción: ");
 
+            switch (opcion) {
+                case 1 -> gestionarMovimientoStock();
+                case 2 -> movimientoCRUD.importarMovimientosDesdeCSV("src/resources/movimientos.csv");
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> System.out.println("Opción no válida");
+            }
+        } while (opcion != 0);
+    }
     // ================== FUNCIONES DE CATEGORÍAS ==================
     private static void listarCategorias() {
         List<Categoria> categorias = categoriaCRUD.listarCategorias();
@@ -177,7 +198,7 @@ public class App {
         int tipo = leerEntero("");
 
         boolean entrada = tipo == 1;
-        productoCRUD.moverStock(id, cantidad, entrada);
+        movimientoCRUD.moverStock(id, cantidad, entrada);
         System.out.println("Movimiento de stock realizado.");
     }
 
@@ -233,7 +254,6 @@ public class App {
                             System.out.println(producto);
                         }
                     }
-                    logs.info("Consulta Top N productos más vendidos ejecutada correctamente.");
                 }
 
                 case 2 -> {
@@ -246,7 +266,6 @@ public class App {
                             System.out.println(linea);
                         }
                     }
-                    logs.info("Consulta valor total de stock por categoría ejecutada correctamente.");
                 }
 
                 case 3 -> {
@@ -263,7 +282,6 @@ public class App {
                             System.out.println(mov);
                         }
                     }
-                    logs.info("Consulta de histórico de movimientos ejecutada correctamente.");
                 }
 
                 case 0 -> System.out.println("Volviendo al menú principal...");

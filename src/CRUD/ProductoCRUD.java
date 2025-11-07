@@ -79,43 +79,7 @@ public class ProductoCRUD {
     }
 
     // ================== STOCK Y MOVIMIENTOS ==================
-    public void moverStock(int id_Producto, int cantidad, boolean entrada) {
-        String sqlActualizar = "UPDATE productos SET stock = stock + ? WHERE id = ?";
-        String sqlInsertarMovimiento = "INSERT INTO movimientos (id_producto, tipo, cantidad, fecha) VALUES (?, ?, ?, NOW())";
-
-        try (Connection conn = DBconexion.getConnection()) {
-            conn.setAutoCommit(false);
-
-            try (PreparedStatement psUpdate = conn.prepareStatement(sqlActualizar);
-                 PreparedStatement psInsert = conn.prepareStatement(sqlInsertarMovimiento)) {
-
-                int delta = entrada ? cantidad : -cantidad;
-                String tipo = entrada ? "ENTRADA" : "SALIDA";
-
-                psUpdate.setInt(1, delta);
-                psUpdate.setInt(2, id_Producto);
-                psUpdate.executeUpdate();
-
-                psInsert.setInt(1, id_Producto);
-                psInsert.setString(2, tipo);
-                psInsert.setInt(3, cantidad);
-                psInsert.executeUpdate();
-
-                conn.commit();
-                logs.info("Movimiento de stock registrado correctamente: " + tipo + " de " + cantidad +
-                          " producto/s para producto de id= " + id_Producto);
-
-            } catch (SQLException e) {
-                conn.rollback();
-                logs.error("Error en movimiento de stock: " + e.getMessage());
-            } finally {
-                conn.setAutoCommit(true);
-            }
-
-        } catch (SQLException e) {
-            logs.error("Error de conexión al mover stock: " + e.getMessage());
-        }
-    }
+    
 
     // ================== EXPORTAR A JSON ==================
     public void exportarProductosStockBajo(int limiteStock) {
@@ -206,4 +170,5 @@ public class ProductoCRUD {
         }
         return resultado;
     }
+
 }
