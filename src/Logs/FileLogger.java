@@ -75,4 +75,7 @@ public class FileLogger {
     public void fatal(String mensaje) {
         writeLog("FATAL", mensaje, errorlogFile);
     }
+    public void registro(String mensaje) {
+    	writeLog("REGISTRO", mensaje, logFile);
+    }
 }

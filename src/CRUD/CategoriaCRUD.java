@@ -105,5 +105,23 @@ public class CategoriaCRUD {
 
         return resultado;
     }
-
+    public String getNombreCategoriaPorId(int id) {
+        String sql = "SELECT nombre FROM categorias WHERE id = ?";
+        String nombre = "Desconocida"; // Valor por defecto si no se encuentra
+        try (Connection conn = DBconexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    nombre = rs.getString("nombre");
+                } else {
+                    logs.warning("No se encontró ninguna categoría con ID = " + id);
+                }
+            }
+        } catch (SQLException e) {
+            logs.error("Error al obtener el nombre de la categoría con ID = " + id + ": " + e.getMessage());
+        }
+        return nombre;
+    
+    }
 }

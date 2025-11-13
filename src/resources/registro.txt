@@ -1,0 +1,13 @@
+2025-11-13 16:33:14 - Listado de inventario mostrado
+2025-11-13 16:33:26 - Producto agregado: A,1,123
+2025-11-13 16:33:27 - Listado de inventario mostrado
+2025-11-13 16:33:53 - Producto modificado: A,2,1
+2025-11-13 16:33:55 - Listado de inventario mostrado
+2025-11-13 16:34:22 - Producto eliminado: A
+2025-11-13 16:34:23 - Listado de inventario mostrado
+2025-11-13 16:34:30 - Producto agregado: A,1,1
+2025-11-13 16:34:35 - Producto agregado: B,1,1
+2025-11-13 16:34:39 - Producto agregado: C,1,1
+2025-11-13 16:34:45 - Búsqueda de producto: A
+2025-11-13 16:34:53 - Listado de inventario mostrado
+2025-11-13 16:35:04 - Backup de inventario realizado: src/resources/inventario_backup_2025-11-13_16-35-04.txt

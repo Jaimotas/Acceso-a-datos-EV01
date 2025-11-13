@@ -8,6 +8,7 @@ import CRUD.MovimientoCRUD;
 import Logs.FileLogger;
 import SQL.CargaCSVs;
 import XML.XMLManager;
+import Files.ArchivoInventario;
 
 public class App {
     private static Scanner sc = new Scanner(System.in);
@@ -31,6 +32,7 @@ public class App {
                 case 5 -> exportarA_XML();
                 case 6 -> importarDesde_XML();
                 case 7 -> consultasAvanzadas();
+                case 8 -> gestionInventarioArchivos();
                 case 0 -> {
                     System.out.println("Saliendo de la aplicación...");
                     logs.info("Aplicación cerrada correctamente.");
@@ -49,6 +51,7 @@ public class App {
         System.out.println("5. Exportar inventario a XML");
         System.out.println("6. Importar inventario desde XML");
         System.out.println("7. Consultas avanzadas SQL");
+        System.out.println("8. Gestión de inventario en archivos");
         System.out.println("0. Salir");
     }
 
@@ -101,6 +104,7 @@ public class App {
             }
         } while (opcion != 0);
     }
+
     // ================== MOVIMIENTOS ==================
     private static void gestionarMovimientos() {
         int opcion;
@@ -119,6 +123,7 @@ public class App {
             }
         } while (opcion != 0);
     }
+
     // ================== FUNCIONES DE CATEGORÍAS ==================
     private static void listarCategorias() {
         List<Categoria> categorias = categoriaCRUD.listarCategorias();
@@ -196,7 +201,6 @@ public class App {
         int cantidad = leerEntero("Cantidad: ");
         System.out.print("Tipo de movimiento (1 = Entrada, 2 = Salida): ");
         int tipo = leerEntero("");
-
         boolean entrada = tipo == 1;
         movimientoCRUD.moverStock(id, cantidad, entrada);
         System.out.println("Movimiento de stock realizado.");
@@ -231,7 +235,7 @@ public class App {
         }
     }
 
- // ================== CONSULTAS AVANZADAS ==================
+    // ================== CONSULTAS AVANZADAS ==================
     private static void consultasAvanzadas() {
         int opcion;
         do {
@@ -247,27 +251,15 @@ public class App {
                     int n = leerEntero("Introduce N: ");
                     System.out.println("\n Top " + n + " productos más vendidos:");
                     List<String> topProductos = productoCRUD.topNProductosMasVendidos(n);
-                    if (topProductos.isEmpty()) {
-                        System.out.println("No hay datos disponibles.");
-                    } else {
-                        for (String producto : topProductos) {
-                            System.out.println(producto);
-                        }
-                    }
+                    if (topProductos.isEmpty()) System.out.println("No hay datos disponibles.");
+                    else topProductos.forEach(System.out::println);
                 }
-
                 case 2 -> {
                     System.out.println("\n Valor total del stock por categoría:");
                     List<String> valores = categoriaCRUD.valorTotalStockPorCategoria();
-                    if (valores.isEmpty()) {
-                        System.out.println("No hay categorías o productos registrados.");
-                    } else {
-                        for (String linea : valores) {
-                            System.out.println(linea);
-                        }
-                    }
+                    if (valores.isEmpty()) System.out.println("No hay categorías o productos registrados.");
+                    else valores.forEach(System.out::println);
                 }
-
                 case 3 -> {
                     System.out.print("Fecha inicio (YYYY-MM-DD): ");
                     String inicio = sc.nextLine();
@@ -275,22 +267,46 @@ public class App {
                     String fin = sc.nextLine();
                     System.out.println("\n Histórico de movimientos entre " + inicio + " y " + fin + ":");
                     List<String> movimientos = productoCRUD.historicoMovimientosPorFechas(inicio, fin);
-                    if (movimientos.isEmpty()) {
-                        System.out.println("No se encontraron movimientos en ese rango de fechas.");
-                    } else {
-                        for (String mov : movimientos) {
-                            System.out.println(mov);
-                        }
-                    }
+                    if (movimientos.isEmpty()) System.out.println("No se encontraron movimientos en ese rango de fechas.");
+                    else movimientos.forEach(System.out::println);
                 }
-
                 case 0 -> System.out.println("Volviendo al menú principal...");
                 default -> System.out.println("Opción no válida");
             }
         } while (opcion != 0);
     }
 
+ // ================== GESTIÓN DE INVENTARIO CON ARCHIVOS ==================
+    private static void gestionInventarioArchivos() {
+        // Al arrancar, exportamos la base de datos a inventario.txt
+        List<String> inventario = ArchivoInventario.cargarInventario();
+        int opcion;
+        do {
+        	 System.out.println("\n--- Gestión de Inventario en Archivos ---");
+             System.out.println("1. Cargar base de datos a inventario.txt");
+             System.out.println("2. Listar inventario");
+             System.out.println("3. Agregar producto");
+             System.out.println("4. Modificar producto");
+             System.out.println("5. Borrar producto");
+             System.out.println("6. Buscar producto");
+             System.out.println("7. Consultar historial");
+             System.out.println("0. Volver al menú principal");
+             opcion = leerEntero("Elige una opción: ");
 
+            switch (opcion) {
+            	case 1 -> ArchivoInventario.cargarInventarioDeBD();
+                case 2 -> ArchivoInventario.listarInventarioTXT(inventario);
+                case 3 -> ArchivoInventario.agregarProductoTXT(inventario);
+                case 4 -> ArchivoInventario.modificarProductoTXT(inventario);
+                case 5 -> ArchivoInventario.borrarProductoTXT(inventario);
+                case 6 -> ArchivoInventario.buscarProductoTXT(inventario);
+                case 7 -> ArchivoInventario.mostrarHistorialTXT();
+                case 8 -> ArchivoInventario.backupInventarioTXT();
+                case 0 -> ArchivoInventario.guardarArchivo(inventario);
+                default -> System.out.println("Opción no válida");
+            }
+        } while (opcion != 0);
+    }
     // ================== UTILIDADES ==================
     private static int leerEntero(String msg) {
         while (true) {

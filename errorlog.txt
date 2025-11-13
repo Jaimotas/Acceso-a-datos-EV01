@@ -1,1 +1,1 @@
-
+[2025-11-13T18:20:10.613784300] [ERROR] Error al borrar producto: For input string: "a"
